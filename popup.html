@@ -23,21 +23,22 @@
       padding: 0;
     }
 
-    /* Curving the main popup window */
-    html {
-      border-radius: 16px;
-      overflow: hidden;
-    }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: var(--bg);
       color: var(--text-main);
-      width: 270px;
-      padding: 14px;
+      width: 280px;
+      padding: 8px; /* Outer margin around inner card */
       user-select: none;
-      border-radius: 16px;
+    }
+
+    /* Inner Wrapper Card for Curved Illusion */
+    .app-card {
+      background-color: var(--bg);
       border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 4px 12px rgba(61, 43, 31, 0.08);
       overflow: hidden;
     }
 
@@ -170,7 +171,7 @@
       background-color: var(--card-bg);
       color: var(--text-main);
       border: 1px solid var(--card-border);
-      display: none; /* hidden until color picked */
+      display: none;
     }
 
     .btn-sub:hover {
@@ -282,28 +283,30 @@
 </head>
 <body>
 
-  <div id="preview" class="hero-card">
-    <div id="formatBadge" class="hero-badge">HEX</div>
-    <div id="colorValue" class="color-value">#------</div>
+  <div class="app-card">
+    <div id="preview" class="hero-card">
+      <div id="formatBadge" class="hero-badge">HEX</div>
+      <div id="colorValue" class="color-value">#------</div>
+    </div>
+
+    <div class="segmented-control">
+      <button class="segment-btn active" data-format="HEX">HEX</button>
+      <button class="segment-btn" data-format="RGB">RGB</button>
+      <button class="segment-btn" data-format="HSL">HSL</button>
+    </div>
+
+    <div class="action-row">
+      <button id="pickBtn" class="btn btn-main">Pick Color</button>
+      <button id="copyBtn" class="btn btn-sub">Copy</button>
+      <button id="saveBtn" class="btn btn-sub">Save</button>
+    </div>
+
+    <div class="section-title">Saved Palette</div>
+    <div id="palette" class="palette-grid"></div>
+
+    <button id="exportBtn" class="btn-footer">Export CSS Variables</button>
+    <button id="shortcutBtn" class="btn-footer btn-shortcut">⚙️ Customize Keyboard Shortcut</button>
   </div>
-
-  <div class="segmented-control">
-    <button class="segment-btn active" data-format="HEX">HEX</button>
-    <button class="segment-btn" data-format="RGB">RGB</button>
-    <button class="segment-btn" data-format="HSL">HSL</button>
-  </div>
-
-  <div class="action-row">
-    <button id="pickBtn" class="btn btn-main">Pick Color</button>
-    <button id="copyBtn" class="btn btn-sub">Copy</button>
-    <button id="saveBtn" class="btn btn-sub">Save</button>
-  </div>
-
-  <div class="section-title">Saved Palette</div>
-  <div id="palette" class="palette-grid"></div>
-
-  <button id="exportBtn" class="btn-footer">Export CSS Variables</button>
-  <button id="shortcutBtn" class="btn-footer btn-shortcut">⚙️ Customize Keyboard Shortcut</button>
 
   <script src="popup.js"></script>
 </body>
