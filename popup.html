@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
-      --bg: #1e1e2e;
-      --card-bg: #2b2b3d;
-      --text: #f8f8f2;
-      --text-muted: #a6adc8;
-      --accent: #89b4fa;
-      --accent-hover: #74c7ec;
-      --danger: #f38ba8;
-      --border: #45475a;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --success: #10b981;
+      --danger: #ef4444;
     }
 
     * {
@@ -24,141 +25,144 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: var(--bg);
-      color: var(--text);
-      width: 260px;
-      padding: 16px;
+      color: var(--text-main);
+      width: 270px;
+      padding: 14px;
       user-select: none;
     }
 
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 14px;
-    }
-
-    .header h1 {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .preview-card {
-      background: var(--card-bg);
+    /* Hero Banner / Color Swatch */
+    .hero-card {
+      position: relative;
+      width: 100%;
+      height: 90px;
       border-radius: 12px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      border: 1px solid var(--border);
-      margin-bottom: 16px;
-    }
-
-    .color-display {
-      width: 100%;
-      height: 48px;
-      border-radius: 8px;
+      background-color: #334155;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      background-color: #313244;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.2s ease;
-    }
-
-    .format-row {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-
-    select {
-      background-color: #313244;
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 6px;
-      font-size: 12px;
-      outline: none;
-      cursor: pointer;
-    }
-
-    .color-value-input {
-      flex: 1;
-      background-color: #11111b;
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 6px;
-      padding: 6px 8px;
-      font-family: monospace;
-      font-size: 12px;
-      text-align: center;
-    }
-
-    .format-details {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      font-size: 11px;
-      font-color: var(--text-muted);
-      font-family: monospace;
-      background: #181825;
-      padding: 8px;
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,0.05);
+      justify-content: flex-end;
+      padding: 10px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.25s ease;
     }
 
-    .detail-item {
+    .hero-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    .color-value {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 16px;
+      font-weight: 800;
+      color: #ffffff;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Format Switcher Pills */
+    .segmented-control {
       display: flex;
-      justify-content: space-between;
+      background-color: var(--card-bg);
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      margin-bottom: 12px;
+      gap: 2px;
     }
 
-    .detail-label {
-      color: var(--text-muted);
-    }
-
-    .button-group {
-      display: flex;
-      gap: 8px;
-      width: 100%;
-    }
-
-    button {
+    .segment-btn {
       flex: 1;
-      padding: 8px 12px;
+      background: transparent;
       border: none;
+      color: var(--text-muted);
+      padding: 5px 0;
+      font-size: 10px;
+      font-weight: 700;
       border-radius: 6px;
-      font-weight: 600;
-      font-size: 12px;
       cursor: pointer;
       transition: all 0.15s ease;
     }
 
-    .btn-primary {
-      background-color: var(--accent);
-      color: #11111b;
+    .segment-btn.active {
+      background-color: var(--primary);
+      color: #ffffff;
     }
 
-    .btn-primary:hover {
-      background-color: var(--accent-hover);
+    /* Primary Actions */
+    .action-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+      width: 100%;
     }
 
-    .btn-secondary {
-      background-color: #313244;
-      color: var(--text);
-      border: 1px solid var(--border);
+    .btn {
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
     }
 
-    .btn-action {
-      display: none;
+    .btn-main {
+      flex: 2;
+      background-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-main:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-sub {
+      flex: 1;
+      background-color: var(--card-bg);
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      display: none; /* hidden until color picked */
+    }
+
+    .btn-sub:hover {
+      background-color: #334155;
+    }
+
+    /* Palette Grid */
+    .section-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
     }
 
     .palette-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
+      gap: 6px;
       margin-bottom: 12px;
-      min-height: 36px;
+      min-height: 38px;
     }
 
     .swatch-wrapper {
@@ -171,74 +175,74 @@
       width: 100%;
       height: 100%;
       border-radius: 6px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .swatch:hover {
+      transform: translateY(-2px);
     }
 
     .delete-btn {
       position: absolute;
-      top: -4px;
-      right: -4px;
+      top: -3px;
+      right: -3px;
       width: 14px;
       height: 14px;
       background-color: var(--danger);
       color: #fff;
       border-radius: 50%;
       font-size: 10px;
+      border: none;
       display: none;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      border: none;
     }
 
     .swatch-wrapper:hover .delete-btn {
       display: flex;
     }
 
-    .export-btn {
+    .btn-export {
       width: 100%;
       background-color: transparent;
       color: var(--text-muted);
-      border: 1px dashed var(--border);
-      font-size: 11px;
+      border: 1px dashed var(--card-border);
+      font-size: 10px;
       padding: 6px;
+    }
+
+    .btn-export:hover {
+      border-color: var(--primary);
+      color: var(--primary);
     }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <h1>Color Picker</h1>
+  <div id="preview" class="hero-card">
+    <div id="formatBadge" class="hero-badge">HEX</div>
+    <div id="colorValue" class="color-value">#------</div>
   </div>
 
-  <div class="preview-card">
-    <div id="preview" class="color-display"></div>
-
-    <div class="format-row">
-      <select id="formatSelect">
-        <option value="HEX">HEX</option>
-        <option value="RGB">RGB</option>
-        <option value="HSL">HSL</option>
-      </select>
-      <input type="text" id="colorOutput" class="color-value-input" readonly value="#------">
-    </div>
-
-    <div class="format-details" id="detailsBox">
-      <div class="detail-item"><span class="detail-label">RGB:</span> <span id="rgbVal">-</span></div>
-      <div class="detail-item"><span class="detail-label">HSL:</span> <span id="hslVal">-</span></div>
-    </div>
-    
-    <button id="pickBtn" class="btn-primary">Pick Color</button>
-    
-    <div class="button-group">
-      <button id="copyBtn" class="btn-secondary btn-action">Copy</button>
-      <button id="saveBtn" class="btn-secondary btn-action">Save</button>
-    </div>
+  <div class="segmented-control">
+    <button class="segment-btn active" data-format="HEX">HEX</button>
+    <button class="segment-btn" data-format="RGB">RGB</button>
+    <button class="segment-btn" data-format="HSL">HSL</button>
   </div>
 
+  <div class="action-row">
+    <button id="pickBtn" class="btn btn-main">Pick Color</button>
+    <button id="copyBtn" class="btn btn-sub">Copy</button>
+    <button id="saveBtn" class="btn btn-sub">Save</button>
+  </div>
+
+  <div class="section-title">Saved Palette</div>
   <div id="palette" class="palette-grid"></div>
-  <button id="exportBtn" class="export-btn">Export CSS Variables</button>
+
+  <button id="exportBtn" class="btn btn-export">Export CSS Variables</button>
 
   <script src="popup.js"></script>
 </body>
