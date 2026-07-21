@@ -243,7 +243,8 @@
       display: flex;
     }
 
-    .btn-export {
+    /* Footer Buttons */
+    .btn-footer {
       width: 100%;
       background-color: transparent;
       color: var(--text-muted);
@@ -255,14 +256,19 @@
       transition: all 0.2s ease;
     }
 
-    .btn-export:hover {
+    .btn-footer:hover {
       border-color: var(--primary);
       color: var(--primary);
       background-color: rgba(99, 102, 241, 0.08);
     }
 
-    .btn-export:active {
+    .btn-footer:active {
       transform: scale(0.99);
+    }
+
+    .btn-shortcut {
+      border-style: solid;
+      margin-top: 6px;
     }
   </style>
 </head>
@@ -285,10 +291,11 @@
     <button id="saveBtn" class="btn btn-sub">Save</button>
   </div>
 
-  <div class="section-title">Saved Colors</div>
+  <div class="section-title">Saved Palette</div>
   <div id="palette" class="palette-grid"></div>
 
-  <button id="exportBtn" class="btn-export">Export CSS Variables</button>
+  <button id="exportBtn" class="btn-footer">Export CSS Variables</button>
+  <button id="shortcutBtn" class="btn-footer btn-shortcut">⚙️ Customize Keyboard Shortcut</button>
 
   <script src="popup.js"></script>
 </body>
