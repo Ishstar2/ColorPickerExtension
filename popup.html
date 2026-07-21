@@ -1,61 +1,231 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      font-family: sans-serif;
-      width: 220px;
-      padding: 12px;
-      text-align: center;
+    :root {
+      --bg: #1e1e2e;
+      --card-bg: #2b2b3d;
+      --text: #f8f8f2;
+      --text-muted: #a6adc8;
+      --accent: #89b4fa;
+      --accent-hover: #74c7ec;
+      --success: #a6e3a1;
+      --danger: #f38ba8;
+      --border: #45475a;
     }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      width: 250px;
+      padding: 16px;
+      user-select: none;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .header h1 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .preview-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    .color-display {
+      width: 100%;
+      height: 50px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: #313244;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s ease;
+    }
+
+    .color-value {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text);
+      letter-spacing: 0.5px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+    }
+
     button {
+      flex: 1;
       padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background-color: var(--accent);
+      color: #11111b;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background-color: #313244;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background-color: #45475a;
+    }
+
+    .btn-action {
+      display: none;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+    }
+
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+      min-height: 36px;
+    }
+
+    .swatch-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+    }
+
+    .swatch {
+      width: 100%;
+      height: 100%;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .swatch:hover {
+      transform: scale(1.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 14px;
+      height: 14px;
+      background-color: var(--danger);
+      color: #fff;
+      border-radius: 50%;
+      font-size: 10px;
+      line-height: 1;
+      display: none;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
       border: none;
-      background-color: #007bff;
-      color: white;
-      border-radius: 4px;
-      width: 100%;
-      margin-bottom: 6px;
     }
-    #copyBtn { background-color: #28a745; display: none; }
-    #saveBtn { background-color: #6c757d; display: none; }
-    #exportBtn { background-color: #17a2b8; margin-top: 10px; }
-    #result { margin: 8px 0; font-weight: bold; }
-    #preview { width: 100%; height: 30px; margin-top: 6px; border-radius: 4px; border: 1px solid #ccc; }
-    
-    .section-title {
-      font-size: 12px;
-      font-weight: bold;
-      color: #555;
-      margin-top: 12px;
-      text-align: left;
-    }
-    .palette-container {
+
+    .swatch-wrapper:hover .delete-btn {
       display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 6px;
     }
-    .swatch {
-      width: 24px;
-      height: 24px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      cursor: pointer;
+
+    .export-btn {
+      width: 100%;
+      background-color: transparent;
+      color: var(--text-muted);
+      border: 1px dashed var(--border);
+      font-size: 11px;
+    }
+
+    .export-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background-color: rgba(137, 180, 250, 0.05);
     }
   </style>
 </head>
 <body>
-  <button id="pickBtn">Pick Color</button>
-  <button id="copyBtn">Copy HEX</button>
-  <button id="saveBtn">Save to Palette</button>
-  <div id="result">No color picked</div>
-  <div id="preview"></div>
 
-  <div class="section-title">Saved Palette</div>
-  <div id="palette" class="palette-container"></div>
-  <button id="exportBtn">Export as CSS Variables</button>
+  <div class="header">
+    <h1>Color Picker</h1>
+  </div>
+
+  <div class="preview-card">
+    <div id="preview" class="color-display">
+      <span id="result" class="color-value">#------</span>
+    </div>
+    
+    <button id="pickBtn" class="btn-primary">Pick Color</button>
+    
+    <div class="button-group">
+      <button id="copyBtn" class="btn-secondary btn-action">Copy HEX</button>
+      <button id="saveBtn" class="btn-secondary btn-action">Save</button>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-title">Saved Palette</span>
+  </div>
+
+  <div id="palette" class="palette-grid"></div>
+
+  <button id="exportBtn" class="export-btn">Export CSS Variables</button>
 
   <script src="popup.js"></script>
 </body>
