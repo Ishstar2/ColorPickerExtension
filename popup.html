@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Picker</title>
   <style>
     :root {
       --bg: #0f172a;
@@ -90,17 +91,27 @@
       background: transparent;
       border: none;
       color: var(--text-muted);
-      padding: 5px 0;
+      padding: 6px 0;
       font-size: 10px;
       font-weight: 700;
       border-radius: 6px;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .segment-btn:hover:not(.active) {
+      color: var(--text-main);
+      background-color: rgba(255, 255, 255, 0.05);
     }
 
     .segment-btn.active {
       background-color: var(--primary);
       color: #ffffff;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
+    }
+
+    .segment-btn:active {
+      transform: scale(0.96);
     }
 
     /* Primary Actions */
@@ -118,21 +129,31 @@
       font-weight: 600;
       padding: 8px 10px;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       display: inline-flex;
       align-items: center;
       justify-content: center;
       min-width: 0;
+      position: relative;
+      overflow: hidden;
     }
 
     .btn-main {
       flex: 2;
       background-color: var(--primary);
       color: #ffffff;
+      box-shadow: 0 2px 6px rgba(99, 102, 241, 0.2);
     }
 
     .btn-main:hover {
       background-color: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-main:active {
+      transform: translateY(0) scale(0.98);
+      box-shadow: 0 1px 4px rgba(99, 102, 241, 0.2);
     }
 
     .btn-sub {
@@ -145,6 +166,13 @@
 
     .btn-sub:hover {
       background-color: #334155;
+      border-color: #475569;
+      transform: translateY(-1px);
+      color: #ffffff;
+    }
+
+    .btn-sub:active {
+      transform: translateY(0) scale(0.98);
     }
 
     /* Palette Grid */
@@ -177,11 +205,16 @@
       border-radius: 6px;
       border: 1px solid rgba(255, 255, 255, 0.1);
       cursor: pointer;
-      transition: transform 0.15s ease;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
     }
 
     .swatch:hover {
-      transform: translateY(-2px);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+    }
+
+    .swatch:active {
+      transform: translateY(0) scale(0.95);
     }
 
     .delete-btn {
@@ -199,6 +232,11 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .delete-btn:hover {
+      transform: scale(1.15);
     }
 
     .swatch-wrapper:hover .delete-btn {
@@ -212,11 +250,19 @@
       border: 1px dashed var(--card-border);
       font-size: 10px;
       padding: 6px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
 
     .btn-export:hover {
       border-color: var(--primary);
       color: var(--primary);
+      background-color: rgba(99, 102, 241, 0.08);
+    }
+
+    .btn-export:active {
+      transform: scale(0.99);
     }
   </style>
 </head>
@@ -242,7 +288,7 @@
   <div class="section-title">Saved Palette</div>
   <div id="palette" class="palette-grid"></div>
 
-  <button id="exportBtn" class="btn btn-export">Export CSS Variables</button>
+  <button id="exportBtn" class="btn-export">Export CSS Variables</button>
 
   <script src="popup.js"></script>
 </body>
