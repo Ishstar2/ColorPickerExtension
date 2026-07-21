@@ -1,10 +1,22 @@
 {
   "manifest_version": 3,
   "name": "Color Picker Extension",
-  "version": "1.0",
-  "description": "A simple color picker using the EyeDropper API",
-  "action": {
-    "default_popup": "popup.html"
+  "version": "1.2",
+  "description": "A color picker with palette history and exports",
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   },
-  "permissions": []
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "permissions": [
+    "storage"
+  ]
 }
