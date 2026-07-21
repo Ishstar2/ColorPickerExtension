@@ -190,3 +190,8 @@ document.getElementById('exportBtn').addEventListener('click', () => {
     a.click();
   });
 });
+
+// Open Chrome Shortcuts Settings Page
+document.getElementById('shortcutBtn').addEventListener('click', () => {
+  chrome.tabs.create({ url: 'chrome://extensions/shortcuts' });
+});
