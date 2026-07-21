@@ -1,11 +1,10 @@
 let currentHex = '';
 
-// Load saved palette when popup opens
 document.addEventListener('DOMContentLoaded', loadPalette);
 
 document.getElementById('pickBtn').addEventListener('click', async () => {
   if (!('EyeDropper' in window)) {
-    document.getElementById('result').innerText = "EyeDropper not supported.";
+    document.getElementById('result').innerText = "Not Supported";
     return;
   }
 
@@ -13,28 +12,35 @@ document.getElementById('pickBtn').addEventListener('click', async () => {
 
   try {
     const result = await eyeDropper.open();
-    currentHex = result.sRGBHex;
+    currentHex = result.sRGBHex.toUpperCase();
 
+    // Update UI elements
     document.getElementById('result').innerText = currentHex;
     document.getElementById('preview').style.backgroundColor = currentHex;
 
-    document.getElementById('copyBtn').style.display = 'block';
-    document.getElementById('saveBtn').style.display = 'block';
+    // Reveal Action Buttons
+    document.getElementById('copyBtn').style.display = 'flex';
+    document.getElementById('saveBtn').style.display = 'flex';
     document.getElementById('copyBtn').innerText = 'Copy HEX';
+    document.getElementById('saveBtn').innerText = 'Save';
   } catch (e) {
     console.log("Canceled color picking.");
   }
 });
 
-// Copy to Clipboard
+// Copy to Clipboard with Feedback
 document.getElementById('copyBtn').addEventListener('click', async () => {
   if (currentHex) {
     await navigator.clipboard.writeText(currentHex);
-    document.getElementById('copyBtn').innerText = 'Copied!';
+    const copyBtn = document.getElementById('copyBtn');
+    copyBtn.innerText = 'Copied!';
+    setTimeout(() => {
+      copyBtn.innerText = 'Copy HEX';
+    }, 1500);
   }
 });
 
-// Save Color to Storage
+// Save Color to Local Storage
 document.getElementById('saveBtn').addEventListener('click', () => {
   if (!currentHex) return;
 
@@ -44,24 +50,32 @@ document.getElementById('saveBtn').addEventListener('click', () => {
       updatedColors.push(currentHex);
       chrome.storage.local.set({ savedColors: updatedColors }, () => {
         renderPalette(updatedColors);
+        const saveBtn = document.getElementById('saveBtn');
+        saveBtn.innerText = 'Saved!';
+        setTimeout(() => {
+          saveBtn.innerText = 'Save';
+        }, 1500);
       });
     }
   });
 });
 
-// Load Palette from Storage
+// Load Palette
 function loadPalette() {
   chrome.storage.local.get({ savedColors: [] }, (data) => {
     renderPalette(data.savedColors);
   });
 }
 
-// Render Palette Swatches
+// Render Palette Swatches with Delete Options
 function renderPalette(colors) {
   const container = document.getElementById('palette');
   container.innerHTML = '';
 
-  colors.forEach((color) => {
+  colors.forEach((color, index) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'swatch-wrapper';
+
     const swatch = document.createElement('div');
     swatch.className = 'swatch';
     swatch.style.backgroundColor = color;
@@ -69,18 +83,42 @@ function renderPalette(colors) {
 
     swatch.addEventListener('click', async () => {
       await navigator.clipboard.writeText(color);
-      document.getElementById('result').innerText = `Copied ${color}!`;
+      document.getElementById('result').innerText = color;
+      document.getElementById('preview').style.backgroundColor = color;
     });
 
-    container.appendChild(swatch);
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete-btn';
+    deleteBtn.innerHTML = '&times;';
+    deleteBtn.title = 'Remove color';
+
+    deleteBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent copying color when deleting
+      removeColor(index);
+    });
+
+    wrapper.appendChild(swatch);
+    wrapper.appendChild(deleteBtn);
+    container.appendChild(wrapper);
   });
 }
 
-// Export as CSS Variables file
+// Remove Color from Storage
+function removeColor(index) {
+  chrome.storage.local.get({ savedColors: [] }, (data) => {
+    const updatedColors = data.savedColors;
+    updatedColors.splice(index, 1);
+    chrome.storage.local.set({ savedColors: updatedColors }, () => {
+      renderPalette(updatedColors);
+    });
+  });
+}
+
+// Export as CSS Variables
 document.getElementById('exportBtn').addEventListener('click', () => {
   chrome.storage.local.get({ savedColors: [] }, (data) => {
     if (data.savedColors.length === 0) {
-      alert("Save some colors first!");
+      alert("No saved colors to export!");
       return;
     }
 
