@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: sans-serif;
+      width: 200px;
+      padding: 12px;
+      text-align: center;
+    }
+    button {
+      padding: 8px 16px;
+      cursor: pointer;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+      width: 100%;
+      margin-bottom: 8px;
+    }
+    #copyBtn {
+      background-color: #28a745;
+      display: none; /* Hidden until a color is picked */
+    }
+    #result {
+      margin: 8px 0;
+      font-weight: bold;
+      word-break: break-all;
+    }
+    #preview {
+      width: 100%;
+      height: 30px;
+      margin-top: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <button id="pickBtn">Pick Color</button>
+  <button id="copyBtn">Copy HEX</button>
+  <div id="result">No color picked</div>
+  <div id="preview"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
