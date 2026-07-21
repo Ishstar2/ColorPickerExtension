@@ -4,43 +4,58 @@
   <style>
     body {
       font-family: sans-serif;
-      width: 200px;
+      width: 220px;
       padding: 12px;
       text-align: center;
     }
     button {
-      padding: 8px 16px;
+      padding: 8px 12px;
       cursor: pointer;
       border: none;
       background-color: #007bff;
       color: white;
       border-radius: 4px;
       width: 100%;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
-    #copyBtn {
-      background-color: #28a745;
-      display: none; /* Hidden until a color is picked */
-    }
-    #result {
-      margin: 8px 0;
+    #copyBtn { background-color: #28a745; display: none; }
+    #saveBtn { background-color: #6c757d; display: none; }
+    #exportBtn { background-color: #17a2b8; margin-top: 10px; }
+    #result { margin: 8px 0; font-weight: bold; }
+    #preview { width: 100%; height: 30px; margin-top: 6px; border-radius: 4px; border: 1px solid #ccc; }
+    
+    .section-title {
+      font-size: 12px;
       font-weight: bold;
-      word-break: break-all;
+      color: #555;
+      margin-top: 12px;
+      text-align: left;
     }
-    #preview {
-      width: 100%;
-      height: 30px;
-      margin-top: 8px;
+    .palette-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .swatch {
+      width: 24px;
+      height: 24px;
       border-radius: 4px;
       border: 1px solid #ccc;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <button id="pickBtn">Pick Color</button>
   <button id="copyBtn">Copy HEX</button>
+  <button id="saveBtn">Save to Palette</button>
   <div id="result">No color picked</div>
   <div id="preview"></div>
+
+  <div class="section-title">Saved Palette</div>
+  <div id="palette" class="palette-container"></div>
+  <button id="exportBtn">Export as CSS Variables</button>
 
   <script src="popup.js"></script>
 </body>
