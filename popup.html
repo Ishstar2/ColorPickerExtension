@@ -11,7 +11,6 @@
       --text-muted: #a6adc8;
       --accent: #89b4fa;
       --accent-hover: #74c7ec;
-      --success: #a6e3a1;
       --danger: #f38ba8;
       --border: #45475a;
     }
@@ -26,7 +25,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: var(--bg);
       color: var(--text);
-      width: 250px;
+      width: 260px;
       padding: 16px;
       user-select: none;
     }
@@ -34,8 +33,8 @@
     .header {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 16px;
+      justify-content: space-between;
+      margin-bottom: 14px;
     }
 
     .header h1 {
@@ -50,15 +49,14 @@
       padding: 12px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 12px;
+      gap: 10px;
       border: 1px solid var(--border);
       margin-bottom: 16px;
     }
 
     .color-display {
       width: 100%;
-      height: 50px;
+      height: 48px;
       border-radius: 8px;
       border: 1px solid rgba(255, 255, 255, 0.1);
       background-color: #313244;
@@ -68,12 +66,55 @@
       transition: background-color 0.2s ease;
     }
 
-    .color-value {
-      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-      font-weight: 700;
-      font-size: 15px;
+    .format-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    select {
+      background-color: #313244;
       color: var(--text);
-      letter-spacing: 0.5px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px;
+      font-size: 12px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .color-value-input {
+      flex: 1;
+      background-color: #11111b;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-family: monospace;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .format-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 11px;
+      font-color: var(--text-muted);
+      font-family: monospace;
+      background: #181825;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .detail-label {
+      color: var(--text-muted);
     }
 
     .button-group {
@@ -91,10 +132,6 @@
       font-size: 12px;
       cursor: pointer;
       transition: all 0.15s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
     }
 
     .btn-primary {
@@ -112,34 +149,15 @@
       border: 1px solid var(--border);
     }
 
-    .btn-secondary:hover {
-      background-color: #45475a;
-    }
-
     .btn-action {
       display: none;
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-
-    .section-title {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--text-muted);
     }
 
     .palette-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 8px;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       min-height: 36px;
     }
 
@@ -155,12 +173,6 @@
       border-radius: 6px;
       border: 1px solid rgba(255, 255, 255, 0.15);
       cursor: pointer;
-      transition: transform 0.1s ease, box-shadow 0.1s ease;
-    }
-
-    .swatch:hover {
-      transform: scale(1.1);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }
 
     .delete-btn {
@@ -173,7 +185,6 @@
       color: #fff;
       border-radius: 50%;
       font-size: 10px;
-      line-height: 1;
       display: none;
       align-items: center;
       justify-content: center;
@@ -191,12 +202,7 @@
       color: var(--text-muted);
       border: 1px dashed var(--border);
       font-size: 11px;
-    }
-
-    .export-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      background-color: rgba(137, 180, 250, 0.05);
+      padding: 6px;
     }
   </style>
 </head>
@@ -207,24 +213,31 @@
   </div>
 
   <div class="preview-card">
-    <div id="preview" class="color-display">
-      <span id="result" class="color-value">#------</span>
+    <div id="preview" class="color-display"></div>
+
+    <div class="format-row">
+      <select id="formatSelect">
+        <option value="HEX">HEX</option>
+        <option value="RGB">RGB</option>
+        <option value="HSL">HSL</option>
+      </select>
+      <input type="text" id="colorOutput" class="color-value-input" readonly value="#------">
+    </div>
+
+    <div class="format-details" id="detailsBox">
+      <div class="detail-item"><span class="detail-label">RGB:</span> <span id="rgbVal">-</span></div>
+      <div class="detail-item"><span class="detail-label">HSL:</span> <span id="hslVal">-</span></div>
     </div>
     
     <button id="pickBtn" class="btn-primary">Pick Color</button>
     
     <div class="button-group">
-      <button id="copyBtn" class="btn-secondary btn-action">Copy HEX</button>
+      <button id="copyBtn" class="btn-secondary btn-action">Copy</button>
       <button id="saveBtn" class="btn-secondary btn-action">Save</button>
     </div>
   </div>
 
-  <div class="section-header">
-    <span class="section-title">Saved Palette</span>
-  </div>
-
   <div id="palette" class="palette-grid"></div>
-
   <button id="exportBtn" class="export-btn">Export CSS Variables</button>
 
   <script src="popup.js"></script>
