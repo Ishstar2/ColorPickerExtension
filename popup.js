@@ -1,17 +1,17 @@
 let currentHex = '';
+let activeFormat = 'HEX';
 
-document.addEventListener('DOMContentLoaded', loadPalette);
+document.addEventListener('DOMContentLoaded', () => {
+  loadPalette();
+  setupFormatSwitchers();
+});
 
-// Converter Helper Functions
+// Color Converters
 function hexToRgb(hex) {
   let c = hex.replace('#', '');
   if (c.length === 3) c = c.split('').map(x => x + x).join('');
   const num = parseInt(c, 16);
-  return {
-    r: (num >> 16) & 255,
-    g: (num >> 8) & 255,
-    b: num & 255
-  };
+  return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
 }
 
 function rgbToHsl(r, g, b) {
@@ -31,39 +31,46 @@ function rgbToHsl(r, g, b) {
     }
     h /= 6;
   }
-  return {
-    h: Math.round(h * 360),
-    s: Math.round(s * 100),
-    l: Math.round(l * 100)
-  };
+  return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
 }
 
-function updateFormattedOutput() {
+function getFormattedColor() {
+  if (!currentHex) return '#------';
+  const { r, g, b } = hexToRgb(currentHex);
+
+  if (activeFormat === 'RGB') return `rgb(${r}, ${g}, ${b})`;
+  if (activeFormat === 'HSL') {
+    const { h, s, l } = rgbToHsl(r, g, b);
+    return `hsl(${h}, ${s}%, ${l}%)`;
+  }
+  return currentHex;
+}
+
+function updateUI() {
   if (!currentHex) return;
 
-  const { r, g, b } = hexToRgb(currentHex);
-  const { h, s, l } = rgbToHsl(r, g, b);
-
-  const rgbStr = `rgb(${r}, ${g}, ${b})`;
-  const hslStr = `hsl(${h}, ${s}%, ${l}%)`;
-
-  document.getElementById('rgbVal').innerText = rgbStr;
-  document.getElementById('hslVal').innerText = hslStr;
-
-  const format = document.getElementById('formatSelect').value;
-  const outputInput = document.getElementById('colorOutput');
-
-  if (format === 'HEX') outputInput.value = currentHex;
-  else if (format === 'RGB') outputInput.value = rgbStr;
-  else if (format === 'HSL') outputInput.value = hslStr;
+  document.getElementById('colorValue').innerText = getFormattedColor();
+  document.getElementById('preview').style.backgroundColor = currentHex;
+  document.getElementById('formatBadge').innerText = activeFormat;
 }
 
-// Event Listeners
-document.getElementById('formatSelect').addEventListener('change', updateFormattedOutput);
+// Setup Format Buttons
+function setupFormatSwitchers() {
+  const buttons = document.querySelectorAll('.segment-btn');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      buttons.forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      activeFormat = e.target.getAttribute('data-format');
+      updateUI();
+    });
+  });
+}
 
+// Pick Color Action
 document.getElementById('pickBtn').addEventListener('click', async () => {
   if (!('EyeDropper' in window)) {
-    document.getElementById('colorOutput').value = "Not Supported";
+    document.getElementById('colorValue').innerText = "Not Supported";
     return;
   }
 
@@ -73,26 +80,27 @@ document.getElementById('pickBtn').addEventListener('click', async () => {
     const result = await eyeDropper.open();
     currentHex = result.sRGBHex.toUpperCase();
 
-    document.getElementById('preview').style.backgroundColor = currentHex;
-    updateFormattedOutput();
+    updateUI();
 
-    document.getElementById('copyBtn').style.display = 'block';
-    document.getElementById('saveBtn').style.display = 'block';
+    document.getElementById('copyBtn').style.display = 'inline-flex';
+    document.getElementById('saveBtn').style.display = 'inline-flex';
   } catch (e) {
     console.log("Canceled color picking.");
   }
 });
 
+// Copy to Clipboard
 document.getElementById('copyBtn').addEventListener('click', async () => {
-  const textToCopy = document.getElementById('colorOutput').value;
-  if (textToCopy && textToCopy !== '#------') {
-    await navigator.clipboard.writeText(textToCopy);
-    const copyBtn = document.getElementById('copyBtn');
-    copyBtn.innerText = 'Copied!';
-    setTimeout(() => { copyBtn.innerText = 'Copy'; }, 1500);
+  const text = getFormattedColor();
+  if (text && text !== '#------') {
+    await navigator.clipboard.writeText(text);
+    const btn = document.getElementById('copyBtn');
+    btn.innerText = 'Copied!';
+    setTimeout(() => { btn.innerText = 'Copy'; }, 1500);
   }
 });
 
+// Save Color
 document.getElementById('saveBtn').addEventListener('click', () => {
   if (!currentHex) return;
 
@@ -102,14 +110,15 @@ document.getElementById('saveBtn').addEventListener('click', () => {
       updatedColors.push(currentHex);
       chrome.storage.local.set({ savedColors: updatedColors }, () => {
         renderPalette(updatedColors);
-        const saveBtn = document.getElementById('saveBtn');
-        saveBtn.innerText = 'Saved!';
-        setTimeout(() => { saveBtn.innerText = 'Save'; }, 1500);
+        const btn = document.getElementById('saveBtn');
+        btn.innerText = 'Saved!';
+        setTimeout(() => { btn.innerText = 'Save'; }, 1500);
       });
     }
   });
 });
 
+// Load and Render Palette
 function loadPalette() {
   chrome.storage.local.get({ savedColors: [] }, (data) => {
     renderPalette(data.savedColors);
@@ -131,8 +140,7 @@ function renderPalette(colors) {
 
     swatch.addEventListener('click', () => {
       currentHex = color;
-      document.getElementById('preview').style.backgroundColor = color;
-      updateFormattedOutput();
+      updateUI();
     });
 
     const deleteBtn = document.createElement('button');
@@ -160,6 +168,7 @@ function removeColor(index) {
   });
 }
 
+// Export CSS
 document.getElementById('exportBtn').addEventListener('click', () => {
   chrome.storage.local.get({ savedColors: [] }, (data) => {
     if (data.savedColors.length === 0) {
