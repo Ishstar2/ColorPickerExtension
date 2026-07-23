@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Color Picker Extension",
-  "version": "1.2",
-  "description": "A color picker with palette history and exports",
+  "name": "Utility Hub Extension",
+  "version": "2.1",
+  "description": "All-in-one productivity suite featuring a color picker, word counter, and local AI text summarizer.",
   "icons": {
     "16": "icon16.png",
     "48": "icon48.png",
@@ -18,5 +18,14 @@
   },
   "permissions": [
     "storage"
-  ]
+  ],
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+E",
+        "mac": "Command+Shift+E"
+      },
+      "description": "Open Utility Hub Popup"
+    }
+  }
 }
