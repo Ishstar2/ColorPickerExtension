@@ -1,65 +1,79 @@
-# Color Picker Chrome Extension
+# Utility Hub Extension
 
-A clean, modern Chrome extension built with Manifest V3 and the native browser EyeDropper API. It helps you quickly sample colors from your screen, convert them between HEX, RGB, and HSL formats, save custom palettes, and export CSS variables.
+An all-in-one productivity Chrome Extension (Manifest V3) featuring a home dashboard and quick-access tools including a color picker & palette manager, a real-time text analyzer, a local AI text summarizer, a calculator, and a QR code generator.
 
 ---
 
 ## Features
 
-- Screen Eyedropper: Pick any pixel on your display using the browser's native EyeDropper API.
-- Live Color Conversions: Automatically converts picked colors into HEX, RGB, and HSL values.
-- Segmented Format Switcher: Toggle between formats using simple button tabs.
-- Clean Aesthetic: Off-white and terracotta design with soft rounded corners and subtle hover animations.
-- Color History & Storage: Saves your picked colors locally across browser sessions with options to inspect or delete individual swatches.
-- Export CSS Variables: Download your saved palette as a ready-to-use palette.css stylesheet.
-- Customizable Shortcuts: Trigger the picker with Ctrl+Shift+E (or Cmd+Shift+E on Mac), with a built-in button to rebind hotkeys in Chrome settings.
-- Lightweight: Written in standard HTML, CSS, and vanilla JavaScript with zero external libraries.
+- **Home Dashboard:** A centralized launcher with custom vector UI icons to navigate seamlessly between utilities.
+- **Color Picker & Palette Manager:**
+  - Pick colors directly from any webpage using the native EyeDropper API.
+  - Instant conversion across HEX, RGB, and HSL color formats.
+  - Save custom color swatches to your persistent local palette.
+  - Export saved colors as a ready-to-use CSS Variables stylesheet (`palette.css`).
+- **Word & Text Counter:**
+  - Real-time word, character (with and without spaces), and estimated reading time calculations.
+  - Persistent input buffer (your typed text stays saved even if you close the popup).
+  - One-click Copy Text and Clear tools.
+- **AI Text Summarizer:**
+  - 100% local, offline text summarization powered by a built-in TextRank graph algorithm.
+  - Automatically identifies key sentences and extracts bulleted summary highlights without requiring external APIs or server requests.
+  - Persistent input and summary output across popup reopens.
+- **Calculator:**
+  - Perform arithmetic calculations (`+`, `-`, `*`, `/`, `%`).
+  - Full keyboard support (numbers, operators, `Enter`, `Backspace`, `Escape`).
+  - Safe, custom evaluator fully compliant with Chrome Extension Manifest V3 Content Security Policy (no `eval` or dynamic code execution).
+- **QR Code Generator:**
+  - Generate instant QR codes for custom text or web URLs.
+  - One-click button to automatically grab the current active tab URL.
+  - Download generated QR codes directly as PNG images.
+- **Native Typography & Modern Styling:**
+  - Styled cleanly with system UI typography (`system-ui`, `-apple-system`, `ui-monospace`) without relying on external web fonts or AI-style geometric sans-serifs.
+- **Keyboard Shortcuts:**
+  - Quick launch default shortcut (`Ctrl+Shift+E` on Windows/Linux, `Cmd+Shift+E` on macOS).
+  - Direct link to customize extension shortcuts from within the app.
 
 ---
 
-## Project Structure
+## File Structure
 
-my-color-picker/
-├── manifest.json   # Extension configuration and command shortcuts
-├── popup.html      # UI layout and styling
-├── popup.js        # Core logic for picking, format math, and storage
-├── icon16.png      # 16x16 px toolbar icon
-├── icon48.png      # 48x48 px extensions page icon
-└── icon128.png     # 128x128 px Web Store icon
-
----
-
-## Installation
-
-1. Download or clone this project folder to your machine.
-2. Open Chrome and go to chrome://extensions/
-3. Turn on "Developer mode" using the toggle switch in the top-right corner.
-4. Click the "Load unpacked" button in the top-left corner.
-5. Select the my-color-picker folder that contains your manifest.json file.
+utility-hub-extension/
+├── manifest.json      # Extension configuration & Manifest V3 definition
+├── popup.html         # Main user interface & styling
+├── popup.js           # Navigation, color picker, text counter, summarizer, calculator & QR logic
+├── Readme.md          # Project documentation
+├── icon-color.svg     # Home screen icon for Color Picker
+├── icon-word.svg      # Home screen icon for Word Counter
+├── icon-ai.svg        # Home screen icon for AI Summarizer
+├── icon-calc.svg      # Home screen icon for Calculator
+├── icon-qr.svg        # Home screen icon for QR Generator
+├── icon16.png         # 16x16 extension icon
+├── icon48.png         # 48x48 extension icon
+└── icon128.png        # 128x128 extension icon
 
 ---
 
-## How to Use
+## Installation Guide
 
-1. Click the extension icon in your toolbar, or press Ctrl+Shift+E (Cmd+Shift+E on Mac).
-2. Click "Pick Color" to launch the screen eyedropper.
-3. Click any pixel on your screen to sample its color.
-4. Use the HEX, RGB, or HSL buttons to pick your preferred format.
-5. Click "Copy" to copy the formatted string straight to your clipboard.
-6. Click "Save" to keep the color in your palette grid.
-7. Click any saved swatch to reload it into the preview, or hover and click the X to delete it.
-8. Click "Export CSS Variables" to download a .css file containing your saved palette.
-9. Click "Customize Keyboard Shortcut" if you want to change the hotkey in Chrome settings.
+1. Clone or Download this repository to your local machine.
+2. Open Google Chrome and navigate to `chrome://extensions/`.
+3. Enable **Developer mode** by toggling the switch in the top-right corner.
+4. Click the **Load unpacked** button in the top-left corner.
+5. Select the `utility-hub-extension` folder containing `manifest.json`.
+6. Click the extension icon in your browser toolbar to open Utility Hub!
 
 ---
 
-## Keyboard Shortcuts
+## Tech Stack & Permissions
 
-- Default: Ctrl + Shift + E (Windows/Linux) or Cmd + Shift + E (Mac)
-- Changing the keybind: Click the shortcut button at the bottom of the extension, or open chrome://extensions/shortcuts in a new tab.
+- **Manifest Version:** 3
+- **Languages:** HTML5, CSS3 (System UI stacks), JavaScript (ES6+)
+- **Icons:** Inline Vector SVGs (`.svg`)
+- **Storage:** `chrome.storage.local` (used to persist active tab preference, palette items, text inputs, summary buffers, and calculator states)
 
 ---
 
 ## License
 
-This project is open-source and free to use under the MIT License.
+Distributed under the MIT License. Feel free to modify and expand with your own custom tools!
